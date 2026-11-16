@@ -4,11 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="A fast, read-only frontend for make.fun bounties: the live bounty board, bounty pages, leaderboards and public profiles.">
+  <meta name="theme-color" content="#0d1117">
   <title>make.fun — bounties, leaderboards, profiles</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="preload" href="./app.js" as="script">
 </head>
 <body>
+  <a class="skip-link" href="#view">Skip to content</a>
   <header class="topbar">
     <a class="brand" href="#/">make<span>.fun</span> <em>board</em></a>
     <nav aria-label="Sections">
@@ -17,7 +19,7 @@
       <a href="#/account/bayu-adi-rahayu" data-nav="profile">Sample profile</a>
     </nav>
   </header>
-  <main id="view" aria-live="polite"></main>
+  <main id="view" tabindex="-1" aria-live="polite"></main>
   <footer class="foot">
     <p>Unofficial community frontend. Read-only: it only calls make.fun&rsquo;s public API
       (<code>https://make.fun/api</code>), no sign-in, nothing is written.

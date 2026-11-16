@@ -99,14 +99,14 @@ export function renderBounty(bounty) {
   return `<div class="detail-head"><h1>${escapeHtml(bounty.title || bounty.slug)}</h1>${statusBadge(bounty)}</div>
   ${bounty.summary ? `<p class="lede">${escapeHtml(bounty.summary)}</p>` : ''}
   ${bountyFacts(bounty)}
-  <div class="meta">
+  <dl class="meta">
     <div><dt>Live pot</dt><dd>${usd(bounty.potUsd ?? bounty.rewardAmount)}</dd></div>
     <div><dt>Entry fee</dt><dd>${bounty.entryFeeUsd ? usd(bounty.entryFeeUsd) : 'Free'}</dd></div>
     <div><dt>Entries</dt><dd>${plural(bounty.submissionCount ?? 0, 'entry', 'entries')}</dd></div>
     <div><dt>Opens</dt><dd><small>${fmtDate(bounty.opensAt || bounty.publishedAt)}</small></dd></div>
     <div><dt>Deadline</dt><dd><small>${fmtDateTime(bounty.deadline)}</small></dd></div>
     <div><dt>Status</dt><dd><small>${escapeHtml(bounty.status || '—')}${entriesOpen(bounty) ? ' · taking entries' : ' · not taking entries'}</small></dd></div>
-  </div>
+  </dl>
   <p><a href="#/bounty/${escapeHtml(bounty.slug)}/leaderboard">See the leaderboard &rarr;</a></p>
   ${rewards.length ? `<h2>Rewards</h2>
   <div class="table-wrap"><table>
@@ -212,9 +212,11 @@ export function renderProfile(profile) {
   <p class="small muted">Profile on make.fun: <a href="https://make.fun/u/${escapeHtml(profile.handle)}">make.fun/u/${escapeHtml(profile.handle)}</a></p>`;
 }
 
-/** Loading and error states the router shows while a view fetches. */
+/** Loading state: a skeleton holds the page's shape instead of a bare spinner. */
 export function renderLoading(label) {
-  return `<p class="loading" role="status">Loading ${escapeHtml(label)}…</p>`;
+  return `<div class="skel" role="status" aria-busy="true" aria-label="Loading ${escapeHtml(label)}">
+    <span></span><span></span><span></span><span></span>
+  </div>`;
 }
 
 export function renderError(message, retryHash) {

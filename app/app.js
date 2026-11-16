@@ -19,7 +19,10 @@ function setReady(done) {
 
 function setNav(name) {
   document.querySelectorAll('[data-nav]').forEach((link) => {
-    link.classList.toggle('active', link.dataset.nav === name);
+    const active = link.dataset.nav === name;
+    link.classList.toggle('active', active);
+    if (active) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
   });
 }
 
@@ -136,18 +139,23 @@ async function showProfile(handle) {
   }
 }
 
-async function route() {
+async function route(navigated = true) {
   const parsed = parseHash();
   document.title = 'make.fun — bounties, leaderboards, profiles';
-  if (parsed.name === 'board') return showBoard();
-  if (parsed.name === 'bounty') return showBounty(parsed.slug);
-  if (parsed.name === 'leaderboard') return showLeaderboard(parsed.slug);
-  if (parsed.name === 'profile') return showProfile(parsed.handle);
-  setReady(false);
-  view.innerHTML = renderNotFound(parsed.hash);
-  setReady(true);
+  if (parsed.name === 'board') await showBoard();
+  else if (parsed.name === 'bounty') await showBounty(parsed.slug);
+  else if (parsed.name === 'leaderboard') await showLeaderboard(parsed.slug);
+  else if (parsed.name === 'profile') await showProfile(parsed.handle);
+  else {
+    setReady(false);
+    view.innerHTML = renderNotFound(parsed.hash);
+    setReady(true);
+  }
+  // Moving to a new view moves keyboard focus with it, so a screen reader
+  // announces the new page instead of staying on the old nav link.
+  if (navigated) view.focus({ preventScroll: true });
 }
 
-window.addEventListener('hashchange', route);
+window.addEventListener('hashchange', () => route(true));
 setReady(false);
-route();
+route(true);
